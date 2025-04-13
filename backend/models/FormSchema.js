@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); 
 
 const fieldSchema = new mongoose.Schema({
   label: String,
@@ -10,9 +10,9 @@ const fieldSchema = new mongoose.Schema({
 });
 
 const formSchema = new mongoose.Schema({
-  formName: String,
+  formName: { type: String, required: true }, // ✅ Ensure 'formName' exists and is required
   fields: [fieldSchema],
-  createdBy: String, // admin ID
+  createdBy: String, // Optional field
 }, { timestamps: true });
 
 module.exports = mongoose.model('FormSchema', formSchema);

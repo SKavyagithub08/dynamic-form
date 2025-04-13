@@ -1,9 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { PlusCircle, Save, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const CreateForm = () => {
+  const [formName, setFormName] = useState("");
   const [fields, setFields] = useState([]);
+  const navigate = useNavigate();
 
   const addField = () => {
     setFields([...fields, { label: "", type: "text", required: false, validation: "" }]);
@@ -22,13 +25,27 @@ const CreateForm = () => {
   };
 
   const saveFormSchema = async () => {
+    if (!formName.trim()) {
+      alert("Please enter a form name.");
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:5000/api/forms", { fields });
-      alert("Form saved successfully!");
+      const response = await axios.post("http://localhost:5000/api/forms", {
+        formName, // ✅ Ensure this is sent as 'formName'
+        fields,
+      });
+
+      alert(`Form "${formName}" saved successfully!`);
+      navigate("/forms");
     } catch (err) {
       console.error(err);
       alert("Failed to save form.");
     }
+  };
+
+  const handleViewSavedForms = () => {
+    navigate("/forms"); // Navigate to the saved forms page
   };
 
   return (
@@ -37,6 +54,17 @@ const CreateForm = () => {
         <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
           Create a Custom Form
         </h1>
+
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-600 mb-1">Form Name</label>
+          <input
+            type="text"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400"
+            placeholder="Enter a descriptive name"
+            value={formName}
+            onChange={(e) => setFormName(e.target.value)}
+          />
+        </div>
 
         {fields.map((field, index) => (
           <div
@@ -119,6 +147,16 @@ const CreateForm = () => {
           >
             <Save size={18} />
             Save Form
+          </button>
+        </div>
+
+        {/* Add the button to view saved forms */}
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={handleViewSavedForms} // On click, navigate to saved forms
+            className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium"
+          >
+            View Saved Forms
           </button>
         </div>
       </div>
