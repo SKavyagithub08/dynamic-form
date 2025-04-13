@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { PlusCircle, Save, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateForm = () => {
   const [formName, setFormName] = useState("");
@@ -26,21 +28,48 @@ const CreateForm = () => {
 
   const saveFormSchema = async () => {
     if (!formName.trim()) {
-      alert("Please enter a form name.");
+      toast.error("Please enter a form name.", {
+        position: "top-right", // Display the error message at the top-right
+        style: {
+          backgroundColor: "#f8d7da",
+          color: "#721c24",
+          border: "1px solid #f5c6cb",
+          borderRadius: "8px",
+        },
+      });
       return;
     }
 
     try {
       const response = await axios.post("http://localhost:5000/api/forms", {
-        formName, // ✅ Ensure this is sent as 'formName'
+        formName,
         fields,
       });
 
-      alert(`Form "${formName}" saved successfully!`);
-      navigate("/forms");
+      const savedFormId = response.data._id; // Get the saved form's ID
+      toast.success(`Form "${formName}" created successfully!`, {
+        position: "top-right", // Display the success message at the top-right
+        style: {
+          backgroundColor: "#d4edda",
+          color: "#155724",
+          border: "1px solid #c3e6cb",
+          borderRadius: "8px",
+        },
+      });
+      setTimeout(() => {
+        navigate(`/form/${savedFormId}`); // Redirect to the form's unique link
+      }, 1000); // Add a slight delay for the toast to display
     } catch (err) {
       console.error(err);
-      alert("Failed to save form.");
+      toast.error("Failed to save form.", {
+        position: "top-right", // Display the error message at the top-right
+        style: {
+          backgroundColor: "#f8d7da",
+          color: "#721c24",
+          border: "1px solid #f5c6cb",
+          borderRadius: "8px",
+        },
+      });
     }
   };
 
@@ -50,7 +79,7 @@ const CreateForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
-      <div className="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+      <div className="max-w-4xl mx-auto bg-white border border-gray-300 rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
           Create a Custom Form
         </h1>
@@ -154,7 +183,7 @@ const CreateForm = () => {
         <div className="flex justify-center gap-4 mt-8">
           <button
             onClick={addField}
-            className="flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white px-5 py-2.5 rounded-lg text-sm font-medium"
+            className="flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white px-6 py-3 rounded-lg text-sm font-medium shadow-lg transform hover:scale-105 transition-transform"
           >
             <PlusCircle size={18} />
             Add Field
@@ -162,18 +191,17 @@ const CreateForm = () => {
 
           <button
             onClick={saveFormSchema}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium"
+            className="flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white px-6 py-3 rounded-lg text-sm font-medium shadow-lg transform hover:scale-105 transition-transform"
           >
             <Save size={18} />
             Save Form
           </button>
         </div>
 
-        {/* Add the button to view saved forms */}
         <div className="flex justify-center mt-8">
           <button
-            onClick={handleViewSavedForms} // On click, navigate to saved forms
-            className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium"
+            onClick={handleViewSavedForms}
+            className="bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white px-6 py-3 rounded-lg text-sm font-medium shadow-lg transform hover:scale-105 transition-transform"
           >
             View Saved Forms
           </button>

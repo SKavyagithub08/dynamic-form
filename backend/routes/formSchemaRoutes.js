@@ -19,8 +19,8 @@ router.post("/", async (req, res) => {
 // Get all forms
 router.get("/", async (req, res) => {
   try {
-    const forms = await FormSchema.find(); // ✅ Fetch all forms, including 'formName'
-    res.json(forms); // ✅ Return the forms
+    const forms = await FormSchema.find(); // Fetch all forms
+    res.json(forms); // Return the forms
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

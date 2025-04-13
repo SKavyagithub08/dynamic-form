@@ -9,6 +9,7 @@ const SavedForms = () => {
     const fetchForms = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/forms");
+        console.log(response.data); // Debugging: Check the fetched forms
         setForms(response.data);
       } catch (err) {
         console.error(err);
@@ -36,7 +37,7 @@ const SavedForms = () => {
                 className="border border-gray-300 rounded-lg px-4 py-3 hover:bg-gray-100 transition"
               >
                 <Link to={`/form/${form._id}`} className="block text-lg font-medium text-gray-700">
-                  📝 {form.formName || "Untitled Form"} {/* ✅ Display the correct formName */}
+                  📝 {form.formName || "Untitled Form"}
                 </Link>
               </li>
             ))}
