@@ -105,6 +105,10 @@ const CreateForm = () => {
                   <option value="email">Email</option>
                   <option value="number">Number</option>
                   <option value="textarea">Textarea</option>
+                  <option value="checkbox">Checkbox</option>
+                  <option value="radio">Radio</option>
+                  <option value="select">Select</option>
+                  <option value="date">Date</option>
                 </select>
               </div>
 
@@ -128,6 +132,21 @@ const CreateForm = () => {
                 />
                 <label className="ml-2 text-sm text-gray-700">Required</label>
               </div>
+
+              {(field.type === "select" || field.type === "radio") && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Options</label>
+                  <input
+                    type="text"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400"
+                    placeholder="Comma-separated values (e.g., Option1, Option2)"
+                    value={field.options?.join(",") || ""}
+                    onChange={(e) =>
+                      updateField(index, "options", e.target.value.split(",").map((opt) => opt.trim()))
+                    }
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}

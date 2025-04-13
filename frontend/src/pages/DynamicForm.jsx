@@ -78,7 +78,7 @@ const DynamicForm = () => {
         {schema.map((field, index) => (
           <div key={index} className="mb-6">
             <label className="block mb-2 font-medium text-gray-700">{field.label}</label>
-            {field.type === "textarea" ? (
+            {field.type === "textarea" && (
               <textarea
                 className={`w-full border p-3 rounded ${
                   errors[field.label] ? "border-red-500" : "border-gray-300"
@@ -86,7 +86,59 @@ const DynamicForm = () => {
                 value={formData[field.label] || ""}
                 onChange={(e) => handleChange(field.label, e.target.value)}
               />
-            ) : (
+            )}
+
+            {field.type === "checkbox" && (
+              <input
+                type="checkbox"
+                className="h-4 w-4 text-gray-600 border-gray-300 rounded focus:ring-gray-400"
+                checked={formData[field.label] || false}
+                onChange={(e) => handleChange(field.label, e.target.checked)}
+              />
+            )}
+
+            {field.type === "radio" && field.options?.map((option, idx) => (
+              <label key={idx} className="block">
+                <input
+                  type="radio"
+                  name={field.label}
+                  value={option}
+                  checked={formData[field.label] === option}
+                  onChange={(e) => handleChange(field.label, e.target.value)}
+                />
+                {option}
+              </label>
+            ))}
+
+            {field.type === "select" && (
+              <select
+                className={`w-full border p-3 rounded ${
+                  errors[field.label] ? "border-red-500" : "border-gray-300"
+                }`}
+                value={formData[field.label] || ""}
+                onChange={(e) => handleChange(field.label, e.target.value)}
+              >
+                <option value="">Select an option</option>
+                {field.options?.map((option, idx) => (
+                  <option key={idx} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {field.type === "date" && (
+              <input
+                type="date"
+                className={`w-full border p-3 rounded ${
+                  errors[field.label] ? "border-red-500" : "border-gray-300"
+                }`}
+                value={formData[field.label] || ""}
+                onChange={(e) => handleChange(field.label, e.target.value)}
+              />
+            )}
+
+            {field.type !== "textarea" && field.type !== "checkbox" && field.type !== "radio" && field.type !== "select" && field.type !== "date" && (
               <input
                 type={field.type}
                 className={`w-full border p-3 rounded ${
