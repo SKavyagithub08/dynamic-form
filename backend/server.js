@@ -7,20 +7,25 @@ const formSchemaRoutes = require('./routes/formSchemaRoutes');
 const formResponseRoutes = require('./routes/formResponseRoutes');
 
 const app = express();
-app.use(cors());
-app.use(express.json()); // Middleware to parse JSON
+
+app.use(cors({
+  origin: "https://dynamic-form-frontend.onrender.com/", // ✅ correct frontend URL
+  credentials: true,
+}));
+
+app.use(express.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB Connected'))
-.catch(err => console.error(err));
+.then(() => console.log('✅ MongoDB Connected'))
+.catch(err => console.error('❌ MongoDB Error:', err));
 
 // Routes
 app.use('/api/forms', formSchemaRoutes);
-app.use('/api/form-responses', formResponseRoutes); // Register the route
+app.use('/api/form-responses', formResponseRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

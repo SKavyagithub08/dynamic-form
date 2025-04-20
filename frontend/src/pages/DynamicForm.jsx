@@ -14,7 +14,7 @@ const DynamicForm = () => {
   useEffect(() => {
     const fetchSchema = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/forms/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/forms/${id}`);
         setSchema(res.data.fields);
       } catch (err) {
         console.error("Schema fetch failed:", err);
@@ -55,7 +55,7 @@ const DynamicForm = () => {
     setIsSubmitting(true);
 
     try {
-      await axios.post(`http://localhost:5000/api/form-responses`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/form-responses`, {
         formId: id,
         responses: formData,
       });

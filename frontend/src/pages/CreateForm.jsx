@@ -41,10 +41,8 @@ const CreateForm = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/forms", {
-        formName,
-        fields,
-      });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/forms`, { formName, fields });
+     
 
       const savedFormId = response.data._id; // Get the saved form's ID
       toast.success(`Form "${formName}" created successfully!`, {
