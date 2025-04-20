@@ -9,7 +9,7 @@ const formResponseRoutes = require('./routes/formResponseRoutes');
 const app = express();
 
 app.use(cors({
-  origin: "https://dynamic-form-frontend.onrender.com/", // ✅ correct frontend URL
+  origin: "https://dynamic-form-frontend.onrender.com", // ✅ correct frontend URL
   credentials: true,
 }));
 
